@@ -3,6 +3,7 @@
 ```json
 {
     "attachBait": true,
+    "numBait": 10,
     "timeInSecsBeforeLogout": 3600,
     "autoLoot": true,
     "imageDir": "",
@@ -30,7 +31,7 @@
         {
             "x": 0,
             "y": 0
-        },
+        }
     ],
     "lootLocation": {
         "x": 0,

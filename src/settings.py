@@ -19,8 +19,6 @@ class Settings():
     # self.threshold = 0.30
     self.splash_threshold_whitepx = 25
     self.canny_thresholds = [80, 180]
-    self.attach_bait = False
-    self.num_bait = 3
     self.time_before_logout = 3600
     self.graceful_exit = False
     self.hearthstone_location = None

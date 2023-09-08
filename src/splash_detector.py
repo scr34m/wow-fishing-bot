@@ -7,9 +7,9 @@ from loguru import logger
 def is_splash_whitepx(threshold, current):
   white_pixels = (current >= 245).sum()
   if white_pixels> threshold:
-      print(f'>>> {white_pixels}')
+      #print(f'>>> {white_pixels}')
       return True
-  print(f'<<< {white_pixels}')
+  #print(f'<<< {white_pixels}')
   return False
 
 def seek_splash(config, area_of_interest):

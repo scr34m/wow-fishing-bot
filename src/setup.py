@@ -2,10 +2,7 @@ import time, math, sys, json, os
 import pyautogui as pag
 import numpy as np
 from pynput.keyboard import Listener, Key
-from pywinauto import Application
 from loguru import logger
-
-
 
 def distance(p1, p2):
   return math.sqrt( (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 )
@@ -65,8 +62,7 @@ def get_area_of_interest():
     time.sleep(0.05)
 
 def focus_wow_window():
-  wow = Application().connect(path="WowClassic.exe", title="World of Warcraft")
-  wow.WorldofWarcraft.set_focus()
+  logger.warning("Set World of Warcraft window to active")
 
 def exit_bot(key):
   if key is Key.esc: 
@@ -98,12 +94,23 @@ def initialize(settings):
       settings.attach_bait = data["attachBait"]
       settings.auto_loot = data["autoLoot"]
       settings.img_dir = data["imgDir"]
-      settings.bait_location = data["baitLocation"]["x"], data["baitLocation"]["y"]
-      settings.pole_location = data["poleLocation"]["x"], data["poleLocation"]["y"]
-      settings.cast_location = data["castLocation"]["x"], data["castLocation"]["y"]
-      settings.loot_location = data["lootLocation"]["x"], data["lootLocation"]["y"]
+
+      if 'baitLocation' in data:
+        settings.bait_location = data["baitLocation"]["x"], data["baitLocation"]["y"]
+      elif settings.attach_bait:
+        settings.bait_location = get_single_loc('bait')
+
+      if 'poleLocation' in data:
+        settings.pole_location = data["poleLocation"]["x"], data["poleLocation"]["y"]
+      elif settings.attach_bait:
+        settings.pole_location = get_pole_loc()
+
+      if 'lootLocation' in data:
+        settings.loot_location = data["lootLocation"]["x"], data["lootLocation"]["y"]
+
       settings.time_before_logout = data["timeInSecsBeforeLogout"]
       settings.graceful_exit = data["gracefulExit"]
+      settings.num_bait = data["numBait"]
 
       if settings.graceful_exit:
         settings.hearthstone_location = data["hearthstoneLocation"]["x"], data["hearthstoneLocation"]["y"]
@@ -116,7 +123,10 @@ def initialize(settings):
       else:
         logger.error("Your area of interest contains less than 3 points... Please redefine")
         settings.area_of_interest = get_area_of_interest()
-        
+
+      #settings.cast_location = data["castLocation"]["x"], data["castLocation"]["y"]
+      settings.cast_location = get_single_loc('cast action')
+
   except IOError:
     logger.info("No configuration file found.")
 

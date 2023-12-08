@@ -6,12 +6,10 @@ from loguru import logger
 from mss import mss
 from pynput.keyboard import Key, Listener
 
-
 width = 50
 height = 50
 directory = '../images'
 count = 0
-
 
 def capture(img):
   global count
@@ -22,6 +20,20 @@ def capture(img):
   count = count + 1
 
 def main():
+  def cap(key):
+    if key is Key.space: 
+      logger.info("Captured")
+      capture(im)
+
+  logger.remove(0)
+  logger.add(sys.stderr, format = "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>", colorize=True)
+
+  logger.info("Press <space> to capture an image or <q> for quit")
+
+  listener = Listener(
+    on_release=cap)
+  listener.start()
+
   with mss() as sct:
     while True:
       x, y = pag.position()
@@ -31,15 +43,12 @@ def main():
         "width": int(width),
         "height": int(height)
       }
-      logger.info(f"({x}, {y})")
       im = np.array(sct.grab(area))
       cv.imshow('preview', im)
 
-      key_bit = cv.waitKey(25) & 0xFF
+      key_bit = cv.waitKey(250) & 0xFF
       if key_bit == ord("q"):
         break
-      with Listener(on_release=cap):
-        capture(im)
   cv.destroyAllWindows()
 
 main()

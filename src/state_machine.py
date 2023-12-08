@@ -17,6 +17,9 @@ round_count = 0
 successes = 0
 
 def init():
+  logger.remove(0)
+  logger.add(sys.stderr, format = "<green>{time:HH:mm:ss.SSS}</green> | <level>{message}</level>", colorize=True)
+
   logger.info("Initializing")
   initialize(config)
   move_state(attach_bait)
@@ -84,6 +87,7 @@ def wait_for_splash():
   if seek_splash(config, current_bob_box):
     time.sleep(random.random()+.5)
     pag.rightClick()
+    time.sleep(random.random()+.1)
     move_state(loot_fish)
 
 def find_hover_wait():

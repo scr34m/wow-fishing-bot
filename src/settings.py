@@ -27,7 +27,10 @@ class Settings():
     
   def load_images(self):
     for f in os.listdir(self.img_dir):
-      self.templates.append(cv.Canny(cv.cvtColor(cv.imread(f"{self.img_dir}/{f}"), cv.COLOR_BGR2GRAY), self.canny_thresholds[0], self.canny_thresholds[1]))
+      img = cv.cvtColor(cv.imread(f"{self.img_dir}/{f}"), cv.COLOR_BGR2GRAY)
+      img = cv.Canny(img, self.canny_thresholds[0], self.canny_thresholds[1])
+      #cv.imwrite(f + '___.PNG', img)
+      self.templates.append(img)
     
     logger.info("Loaded all images in the ./images folder...") 
       

@@ -57,7 +57,7 @@ def search_and_destroy(settings):
         except (MSSException.ScreenShotError):
           continue
         img = cv.Canny(img, settings.canny_thresholds[0], settings.canny_thresholds[1])
-
+        #cv.imshow('preview', img)
         updated_bobber = get_updated_bobber_loc(settings, img)
         if (updated_bobber["value"] > best_target_value):
           best_target_value = updated_bobber["value"]
